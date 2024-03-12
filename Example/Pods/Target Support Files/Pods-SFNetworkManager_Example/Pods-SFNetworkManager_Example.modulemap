@@ -1,0 +1,6 @@
+framework module Pods_SFNetworkManager_Example {
+  umbrella header "Pods-SFNetworkManager_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

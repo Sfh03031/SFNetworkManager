@@ -1,0 +1,6 @@
+framework module Pods_SFNetworkManager_Tests {
+  umbrella header "Pods-SFNetworkManager_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
