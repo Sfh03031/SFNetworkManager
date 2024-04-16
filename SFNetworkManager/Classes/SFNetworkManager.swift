@@ -17,7 +17,7 @@ private(set) var isShowLoading: Bool = true
 
 /// 请求前的设置
 private let endpointClosure = { (target: TargetType) -> Endpoint in
-
+    // 解决网络请求地址里面含有? 时无法解析的bug
     let url = target.baseURL.absoluteString + target.path
     var task = target.task
     var endpoint = Endpoint(
@@ -38,7 +38,7 @@ private let endpointClosure = { (target: TargetType) -> Endpoint in
             return endpoint
         }
     }
-
+    
     return endpoint
 }
 
@@ -68,7 +68,7 @@ private let requestClosure = { (endpoint: Endpoint, done: @escaping MoyaProvider
     }
 }
 
-class SFNetworkManager: NSObject {
+public class SFNetworkManager: NSObject {
 
     /// 进度回调，默认为nil
     typealias progressBlock = (CGFloat) -> Void
@@ -85,7 +85,7 @@ class SFNetworkManager: NSObject {
     ///   - progress: 请求进度，默认为nil
     ///   - success: 成功的回调，接口返回值中的msg和body转换后的model
     ///   - failure: 失败的回调，返回错误信息
-    public static func request<T: HandyJSON>(target: TargetType,
+    static func request<T: HandyJSON>(target: TargetType,
                                              modelType: T.Type,
                                              isLoading: Bool = true,
                                              progress: progressBlock? = nil,
@@ -102,10 +102,8 @@ class SFNetworkManager: NSObject {
                 if let json = try? response.mapJSON(),
                    let obj = JSONDeserializer<SFNetworkResponse>.deserializeFrom(dict: json as? [String: Any])
                 {
-                    
 #if DEBUG
                     print("接收到的数据: \(json)")
-                    
 #endif
                     if obj.code == 200 {
                         if let res = obj.results, res.ret == 100 {
@@ -115,34 +113,26 @@ class SFNetworkManager: NSObject {
                                 return success(res.msg, modelType.deserialize(from: [:]))
                             }
                         } else {
-                            
 #if DEBUG
                             print("无返回数据或数据解析失败: obj.ret=\(String(describing: obj.results?.ret))")
-                            
 #endif
                             return failure("请求失败")
                         }
                     } else {
-                        
 #if DEBUG
                         print("无返回数据或数据解析失败: obj.code=\(obj.code)")
-                        
 #endif
                         return failure("无返回数据或数据解析失败")
                     }
                 } else {
-                    
 #if DEBUG
                     print("数据格式错误: \(response)")
-                    
 #endif
                     return failure("数据格式错误")
                 }
             case .failure(let error):
-                
 #if DEBUG
                 print(error.errorDescription ?? "网络请求失败")
-                
 #endif
                 return failure(error.errorDescription ?? "网络请求失败")
             }
