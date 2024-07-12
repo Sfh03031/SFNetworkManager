@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SFNetworkManager'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = '基于Moya、HandyJSON的网络请求框架，可返回遵循HandyJSON协议的对象模型，可根据需求灵活自定义。'
 
 # This description is used to generate tags and improve search results.
@@ -28,6 +28,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/Sfh03031/SFNetworkManager.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
+  s.swift_versions = '5'
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'SFNetworkManager/Classes/**/*'
@@ -42,5 +43,7 @@ Pod::Spec.new do |s|
   
     s.dependency 'Moya'
     s.dependency 'HandyJSON'
+    s.dependency 'SFNetworkMonitor', '~> 0.1.6'
+    s.dependency 'NVActivityIndicatorView'
   
 end

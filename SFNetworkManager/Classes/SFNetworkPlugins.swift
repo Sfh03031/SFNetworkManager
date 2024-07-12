@@ -8,75 +8,45 @@
 
 import Foundation
 import Moya
-
-#if canImport(SFNetworkMonitor)
 import SFNetworkMonitor
-#endif
-
-#if canImport(SVProgressHUD)
-import SVProgressHUD
-#endif
 
 /// 根据项目实际需要去配置
 class IndicatorPlugin: PluginType {
-#if !canImport(SVProgressHUD)
+
     /// Indicator
-    lazy var activityView: UIActivityIndicatorView = {
-        if #available(iOS 13.0, *) {
-            let view = UIActivityIndicatorView.init()
-            view.activityIndicatorViewStyle = .large
-            view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-            view.hidesWhenStopped = true
-            view.color = .white
-            view.transform = CGAffineTransformMakeScale(2.5, 2.5)
-            return view
-        } else {
-            let view = UIActivityIndicatorView.init()
-            view.activityIndicatorViewStyle = .whiteLarge
-            view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-            view.hidesWhenStopped = true
-            view.color = .white
-            view.transform = CGAffineTransformMakeScale(2.5, 2.5)
-            return view
-        }
+    lazy var activityView: SFNetworkIndicator = {
+        let view = SFNetworkIndicator(frame: UIScreen.main.bounds, message: "loading...", type: .circleStrokeSpin, style: .light)
+//        view.hudBackgroundColor = .systemTeal
+//        view.indicatorColor = .systemPink
+//        view.textColor = .brown
+//        view.maxWith = 300.0
+//        view.padding = 10.0
+//        view.margin = 5.0
+//        view.indicatorWH = 60.0
+//        view.textFont = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+//        view.radius = 10.0
+//        view.offset = 20.0
+//        view.maskColor = UIColor(white: 0, alpha: 0.4)
+        return view
     }()
-#endif
     
     /// 在通过网络发送请求(或存根)之前立即调用
     func willSend(_ request: RequestType, target: TargetType) {
-#if canImport(SFNetworkMonitor)
-        if SFNetworkMonitor.shared.netStatus == .noNet {
-            SFNetworkManager.APIProvider.session.cancelAllRequests()
-        }
-#endif
-        
-        if isShowLoading {
-            DispatchQueue.main.async {
-#if canImport(SVProgressHUD)
-                SVProgressHUD.setDefaultMaskType(SVProgressHUDMaskType.clear)
-                SVProgressHUD.setBackgroundLayerColor(UIColor.init(white: 0.4, alpha: 1))
-                SVProgressHUD.setDefaultStyle(SVProgressHUDStyle.light)
-                SVProgressHUD.setForegroundColor(.black)
-                SVProgressHUD.setDefaultAnimationType(SVProgressHUDAnimationType.flat)
-                SVProgressHUD.show(withStatus: "加载中...")
-                SVProgressHUD.setMinimumDismissTimeInterval(30.0)
-#else
-                self.activityView.center = UIApplication.shared.windows.first { $0.isKeyWindow }!.center
+        DispatchQueue.main.async {
+            if SFNetworkMonitor.shared.isMonitoring && SFNetworkMonitor.shared.netStatus == .noNet {
+                SFNetworkManager.APIProvider.session.cancelAllRequests()
+                return
+            }
+            if isShowLoading {
+                self.activityView.frame = UIApplication.shared.windows.first { $0.isKeyWindow }!.bounds
                 UIApplication.shared.windows.first { $0.isKeyWindow }?.addSubview(self.activityView)
-                self.activityView.startAnimating()
-#endif
             }
         }
     }
     
     func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
         DispatchQueue.main.async {
-#if canImport(SVProgressHUD)
-            SVProgressHUD.dismiss()
-#else
-            self.activityView.stopAnimating()
             self.activityView.removeFromSuperview()
-#endif
         }
     }
 }

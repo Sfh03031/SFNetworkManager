@@ -1,0 +1,6 @@
+framework module SFNetworkMonitor {
+  umbrella header "SFNetworkMonitor-umbrella.h"
+
+  export *
+  module * { export * }
+}

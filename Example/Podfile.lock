@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.9.0)
+  - Alamofire (5.9.1)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -10,9 +10,17 @@ PODS:
     - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
-  - SFNetworkManager (0.1.0):
+  - NVActivityIndicatorView (5.2.0):
+    - NVActivityIndicatorView/Base (= 5.2.0)
+  - NVActivityIndicatorView/Base (5.2.0)
+  - ReachabilitySwift (5.2.3)
+  - SFNetworkManager (0.1.2):
     - HandyJSON
     - Moya
+    - NVActivityIndicatorView
+    - SFNetworkMonitor (~> 0.1.6)
+  - SFNetworkMonitor (0.1.6):
+    - ReachabilitySwift
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
@@ -24,18 +32,24 @@ SPEC REPOS:
     - FBSnapshotTestCase
     - HandyJSON
     - Moya
+    - NVActivityIndicatorView
+    - ReachabilitySwift
+    - SFNetworkMonitor
 
 EXTERNAL SOURCES:
   SFNetworkManager:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: 02b772c9910e8eba1a079227c32fbd9e46c90a24
+  Alamofire: f36a35757af4587d8e4f4bfa223ad10be2422b8c
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
-  SFNetworkManager: 922589358334f902f295cc6523529f03dabbd8ae
+  NVActivityIndicatorView: fe52a6a68664c2df8991d7d9e3d86d8d19453c53
+  ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
+  SFNetworkManager: 9b254f078e2ad4f88aba63f8eefa5722bd047272
+  SFNetworkMonitor: d0fe7f45a151dc42f54c86fcefc1381126cf6a99
 
-PODFILE CHECKSUM: fc54839c21a0233e95288af175ebe1b0599f7323
+PODFILE CHECKSUM: 47067db8b982aed8e4d813e790148d1a6effd6c8
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

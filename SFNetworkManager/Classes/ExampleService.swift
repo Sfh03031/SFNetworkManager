@@ -23,6 +23,12 @@ public enum ExampleService {
     case pageListInfo(parameters:[String:Any])
     /// 版本升级
     case upgradeInfo(parameters:[String:Any])
+    /// 上传图片
+    /// - Parameters:
+    ///   - files: 图片对象数组
+    ///   - name: 名字
+    ///   - parameters: 其它参数
+    case uploadImgs(files: [UIImage], name: String, parameters: [String: Any])
 }
 
 extension ExampleService: TargetType {
@@ -49,6 +55,8 @@ extension ExampleService: TargetType {
             return "gwapi/workbenchserver/api/workbench/getmore"
         case .upgradeInfo:
             return "gwapi/workbenchserver/api/workbench/upgrade"
+        case .uploadImgs:
+            return "gwapi/workbenchserver/api/workbench/upgrade"
         }
     }
     
@@ -69,6 +77,8 @@ extension ExampleService: TargetType {
         // A: return .requestPlain
         // B: return .requestParameters(parameters: [:], encoding: URLEncoding.default)
         // C: return .requestParameters(parameters: [:], encoding: JSONEncoding.default)
+        // D: return .uploadMultipart([MultipartFormData])
+        // E: return .uploadCompositeMultipart([MultipartFormData], urlParameters: [:])
         //
         // ↑↑↑ get请求不带参用A带参用B，post请求用C，注意encoding方式的不同 ↑↑↑
         
@@ -85,6 +95,28 @@ extension ExampleService: TargetType {
             return .requestParameters(parameters: param, encoding: JSONEncoding.default)
         case .upgradeInfo(let param):
             return .requestParameters(parameters: param, encoding: JSONEncoding.default)
+        case .uploadImgs(files: let files, name: let name, parameters: let parameters):
+            var formDatas = [MultipartFormData]()
+            for image in files {
+                let imageData = image.jpegData(compressionQuality: 0.5)
+                let fileName = "iOS\(Date().timeIntervalSince1970).png"
+                let formData = MultipartFormData(provider: .data(imageData!), name: name, fileName: fileName, mimeType: "image/png")
+                formDatas.append(formData)
+            }
+            
+            // MARK: 具体用哪个方法要根据后台接收图片数据的方式来选择，注意encoding方式的不同
+            
+            // 方式一：
+//            return .uploadCompositeMultipart(formDatas, urlParameters: parameters)
+            
+            // 方式二：
+            for item in parameters {
+                let value = item.value as? String ?? ""
+                let formData = MultipartFormData(provider: .data(value.data(using: String.Encoding.utf8)!), name: item.key)
+                formDatas.append(formData)
+            }
+            
+            return .uploadMultipart(formDatas)
         }
     }
     
