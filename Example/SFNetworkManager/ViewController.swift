@@ -25,7 +25,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
             
-        SFNetworkManager.request(target: APIService.yourRequestName(parameters: ["positionKey": "0"]), modelType: BallModel.self, isLoading: true, progress: { progress in
+        SFNetworkManager.request(target: APIService.yourRequestName(parameters: ["positionKey": "0"]), 
+                                 modelType: BallModel.self,
+                                 isLoading: true,
+                                 progress: { progress in
             print("进度: \(progress)")
         }) { msg, model in
             print("msg: \(String(describing: msg))")

@@ -49,7 +49,7 @@ private let requestClosure = { (endpoint: Endpoint, done: @escaping MoyaProvider
         // 设置请求时长
         request.timeoutInterval = timeoutInterval
 
-        #if DEBUG
+#if DEBUG
         // 打印请求参数
         if let requestData = request.httpBody {
             print("请求地址: \(request.url!)" + "\n请求方法: " + "\(String(describing: request.httpMethod))" + "\n请求参数: " + "\(String(data: request.httpBody!, encoding: String.Encoding.utf8) ?? "")")
@@ -60,7 +60,7 @@ private let requestClosure = { (endpoint: Endpoint, done: @escaping MoyaProvider
         if let header = request.allHTTPHeaderFields {
             print("请求头内容\(header)")
         }
-        #endif
+#endif
 
         done(.success(request))
     } catch {

@@ -18,7 +18,7 @@ public struct SFNetworkResponse: HandyJSON {
     public init() {}
     
     public struct SFNetworkResults: HandyJSON {
-        /// 正常code = 100
+        /// 正常ret = 100
         var ret: Int = 0
         var msg: String?
         var body: [String: Any]?
