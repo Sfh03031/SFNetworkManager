@@ -10,6 +10,8 @@
   A network request framework based on Moya and HandyJSON, which can return an object model that follows the HandyJSON protocol and can be flexibly customized according to needs.I have written several examples to demonstrate usage, and the object model can be customized according to requirements by following the HandyJSON protocol.
   
   (zh: 基于Moya、HandyJSON的网络请求框架，可返回遵循HandyJSON协议的对象模型，可根据需求灵活自定义。写了几个例子展示用法，对象模型可按需求进行自定义，只需遵循HandyJSON协议即可。)
+  
+  [DeepWiki](https://deepwiki.com/Sfh03031/SFNetworkManager)
 
 ## Example
 
